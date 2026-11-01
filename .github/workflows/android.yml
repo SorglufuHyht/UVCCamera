@@ -19,8 +19,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Fix gradle.properties jvmargs
+        run: |
+          if [ -f gradle.properties ]; then
+            sed -i 's/-XX:MaxPermSize=[0-9a-zA-Z]*//g' gradle.properties
+          fi
+
       - name: Build with Gradle
-        run: gradle assembleDebug --no-daemon -Dorg.gradle.daemon=false
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
